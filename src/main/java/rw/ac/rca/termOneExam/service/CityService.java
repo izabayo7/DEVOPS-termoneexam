@@ -16,14 +16,29 @@ public class CityService {
 	@Autowired
 	private ICityRepository cityRepository;
 	
-	public Optional<City> getById(long id) {
-		
-		return cityRepository.findById(id);
+	public City getById(long id) {
+		Optional<City> found = cityRepository.findById(id);
+		if(found.isPresent()) {
+			City city = found.get();
+			city.setFahrenheit(convertCelsiusToFahrenheit(city.getWeather()));
+			return city;
+		}
+
+		return null;
 	}
 
 	public List<City> getAll() {
-		
-		return cityRepository.findAll();
+		List<City> cities = cityRepository.findAll();
+
+		for(City city:cities) {
+			city.setFahrenheit(convertCelsiusToFahrenheit(city.getWeather()));
+		}
+
+		return cities;
+	}
+
+	private Double convertCelsiusToFahrenheit(double degrees){
+		return ((degrees * 9)/5) + 32;
 	}
 
 	public boolean existsByName(String name) {

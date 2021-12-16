@@ -28,10 +28,10 @@ public class CityController {
 	@GetMapping("/id/{id}")
 	public ResponseEntity<?> getById(@PathVariable(name = "id") long id) {
 
-		Optional<City> city = cityService.getById(id);
+		City city = cityService.getById(id);
 
-		if (city.isPresent()) {
-			return ResponseEntity.status(HttpStatus.OK).body(city.get());
+		if (city != null) {
+			return ResponseEntity.status(HttpStatus.OK).body(city);
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
